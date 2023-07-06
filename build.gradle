@@ -1,0 +1,229 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'forge'
+            url = 'https://files.minecraftforge.net/maven'
+        }
+        maven {
+            name = 'SpongePowered'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+        maven {
+            name = 'jitpack.io'
+            url = 'https://jitpack.io'
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+        classpath 'com.formdev:flatlaf:1.5'
+    }
+}
+
+// project will not compile when set to true but we can see incompatibilities with vanilla mc.
+boolean TWEAKER = false
+
+// TODO: double check from time to time if there's forge methods we missed with vanilla source
+if (TWEAKER) {
+    apply plugin: 'net.minecraftforge.gradle.tweaker-client'
+} else {
+    apply plugin: 'net.minecraftforge.gradle.forge'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+mainClassName = 'me.shanks.hayabusa.installer.main.Main'
+group project.modGroup //http://maven.apache.org/guides/mini/guide-naming-conventions.html
+
+// build constants
+boolean INCREMENT = false // increments version
+boolean UNIQUE = false // adds a random 8-char string to the build number
+// instead of incrementing the last number
+// this is so that we don't get absurdly large numbers
+// maybe only increment the number automatically if CI is ever added to the repo?
+boolean HASH = false
+boolean DATE = false // adds the date to the random string
+boolean CLEAR = true // clears other jars in the build folder to stop it from being clogged up
+
+boolean VANILLA = false
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    // idk this gets called when u do anything but whatever
+    File versionFile = file 'version'
+    String contents = versionFile.getText( 'UTF-8' )
+    String[] split = contents.split('\\.')
+    int lastVersion = Integer.parseInt(split[2].split('-')[0])
+    if (INCREMENT)
+    {
+        lastVersion++
+    }
+
+    if (!UNIQUE)
+    {
+        contents = split[0] + '.' + split[1] + '.' + (lastVersion)
+    }
+    else
+    {
+        String extra = ""
+        if (DATE)
+        {
+            Date date = Calendar.getInstance().getTime()
+            DateFormat dateFormat = new SimpleDateFormat('mm-dd-yy-hh-mm')
+            extra = dateFormat.format(date) + '-'
+        }
+
+        String generatedString = UUID.randomUUID().toString().split('-')[0]
+        String randomString = lastVersion + '-' + 'build-' + extra + generatedString
+        contents = split[0] + '.' + split[1] + '.' + randomString
+    }
+
+    if (HASH)
+    {
+        contents = split[0] + '.' + split[1] + '.' + lastVersion + '-' + title
+    }
+
+    versionFile.write( contents, 'UTF-8' )
+
+    version contents
+
+    sourceCompatibility = targetCompatibility = '1.8'
+    // Tbh it would be much easier if we could assign this differently
+    // instead of writing it, but StackOverflow didn't give a working
+    // solution for that. One looked promising but it caused duplicate classes.
+    File update = file 'src/main/java/me/shanks/hayabusa/impl/Hayabusa.java'
+    contents = update.getText( 'UTF-8' )
+    contents = contents.replaceAll( 'VERSION = "(.*?)"', 'VERSION = "' + project.version + '"' )
+    update.write( contents, 'UTF-8' )
+    update = file 'src/main/resources/mcmod.info'
+    contents = update.getText( 'UTF-8' )
+    contents = contents.replaceAll( '"version": "(.*?)"', '"version": "' + project.version + '"' )
+    update.write(contents, 'UTF-8')
+
+    File libs = file buildDir.getAbsolutePath() + '/libs/'
+    if (CLEAR)
+    {
+        if (libs.exists() && libs.isDirectory())
+        {
+            for (File file in libs.listFiles())
+            {
+                file.delete()
+            }
+        }
+    }
+}
+
+minecraft {
+    if (TWEAKER)
+    {
+        version = '1.8.9'
+        tweakClass = 'me.shanks.hayabusa.tweaker.HayabusaTweaker'
+    }
+    else
+    {
+        version = project.forgeVersion
+    }
+
+    runDir = 'run'
+    mappings = project.mcpVersion
+    makeObfSourceJar = false
+}
+
+repositories {
+    mavenCentral()
+    google()
+    maven {
+        name = 'spongepowered-repo'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+    maven {
+        name = 'jitpack.io'
+        url  = 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+    }
+
+    compile group: 'club.minnced', name: 'java-discord-rpc', version: '2.0.1'
+    compile group: 'com.formdev', name: 'flatlaf', version: '1.5'
+}
+
+
+task getDeps(type: Copy) {
+    from sourceSets.main.runtimeClasspath
+    into 'runtime/'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('org.spongepowered:mixin'))
+        include(dependency('club.minnced:java-discord-rpc:2.0.1'))
+        include(dependency('club.minnced:discord-rpc-release:v3.3.0'))
+        include(dependency('com.formdev:flatlaf:1.5'))
+    }
+
+    exclude 'dummyThing'
+    exclude 'LICENSE.txt'
+    exclude '**/*module-info.class'
+    exclude '**/META-INF/versions/9/**'
+    classifier = 'release'
+}
+
+mixin {
+    defaultObfuscationEnv searge
+    //noinspection GroovyAssignabilityCheck
+    add sourceSets.main, 'mixins.hayabusa.refmap.json'
+}
+
+reobf {
+    shadowJar {
+        mappingType = VANILLA ? 'NOTCH' : 'SEARGE'
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Manifest-Version': 1.0,
+                'TweakClass': 'me.shanks.hayabusa.tweaker.HayabusaTweaker',
+                'TweakOrder': -999,
+                'FMLCorePluginContainsFMLMod': 'true',
+                'ForceLoadAsMod': 'true',
+                'Main-Class': mainClassName
+        )
+    }
+}
+
+build.dependsOn(shadowJar)

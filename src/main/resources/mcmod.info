@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "hayabusa",
+    "name": "Hayabusa",
+    "description": "A 1.8.9 Skyblock/Hypixel Client.",
+    "version": "1.0.0",
+    "mcversion": "1.8.9",
+    "url": "",
+    "updateUrl": "",
+    "authorList": "Shanks",
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

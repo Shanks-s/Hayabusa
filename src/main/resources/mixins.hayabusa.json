@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.7.11",
+  "package": "me.shanks.hayabusa.impl.core.mixins",
+  "refmap": "mixins.hayabusa.refmap.json",
+  "priority": 2147483645,
+  "mixinPriority": 2147483645,
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "injectors": {
+    "maxShiftBy": 10
+  },
+  "client": [
+  ]
+}
