@@ -42,6 +42,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
+//TODO: this is just temporary.
 mainClassName = 'me.shanks.hayabusa.installer.main.Main'
 group project.modGroup //http://maven.apache.org/guides/mini/guide-naming-conventions.html
 

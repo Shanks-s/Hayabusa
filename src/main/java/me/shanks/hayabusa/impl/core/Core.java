@@ -1,6 +1,7 @@
 package me.shanks.hayabusa.impl.core;
 
 import me.shanks.hayabusa.api.event.bus.instance.Bus;
+import me.shanks.hayabusa.impl.util.misc.FileUtil;
 import me.shanks.hayabusa.tweaker.HayabusaTweaker;
 import me.shanks.hayabusa.tweaker.TweakerCore;
 import me.shanks.hayabusa.vanilla.Environment;
@@ -9,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Hayabusas CoreMod.
@@ -25,6 +29,10 @@ public class Core implements TweakerCore
     {
         LOGGER.info("Initializing Hayabusas Core.");
         LOGGER.info("Found Environment: " + Environment.getEnvironment());
+
+        Path path = Paths.get("hayabusa");
+        FileUtil.createDirectory(path);
+        FileUtil.getDirectory(path, "plugins");
 
         MixinBootstrap.init();
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT)
