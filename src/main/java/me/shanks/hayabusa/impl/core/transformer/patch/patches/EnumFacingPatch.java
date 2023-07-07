@@ -2,7 +2,6 @@ package me.shanks.hayabusa.impl.core.transformer.patch.patches;
 
 import me.shanks.hayabusa.impl.core.Core;
 import me.shanks.hayabusa.impl.core.transformer.patch.ArgumentPatch;
-import net.minecraft.util.EnumFacing;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
@@ -39,4 +38,5 @@ public class EnumFacingPatch extends ArgumentPatch
 
         this.setFinished(applied >= 2);
     }
+
 }
