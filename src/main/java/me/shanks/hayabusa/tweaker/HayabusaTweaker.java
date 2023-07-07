@@ -1,6 +1,10 @@
 package me.shanks.hayabusa.tweaker;
 
 import me.shanks.hayabusa.impl.core.Core;
+import me.shanks.hayabusa.tweaker.launch.ArgumentManager;
+import me.shanks.hayabusa.tweaker.launch.DevArguments;
+import me.shanks.hayabusa.tweaker.launch.arguments.BooleanArgument;
+import me.shanks.hayabusa.tweaker.launch.arguments.LongArgument;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -124,6 +128,7 @@ public class HayabusaTweaker implements ITweaker
             Logger logger = LogManager.getLogger("Hayabusa-Core");
             logger.info("\n\n");
 
+            loadDevArguments();
             core.init(classLoader);
 
             for (String transformer : core.getTransformers())
@@ -168,5 +173,14 @@ public class HayabusaTweaker implements ITweaker
         }
 
         return wrapped.getLaunchArguments();
+    }
+
+    private void loadDevArguments()
+    {
+        ArgumentManager dev = DevArguments.getInstance();
+        dev.addArgument("inventory",   new BooleanArgument());
+        dev.addArgument("inventorymp", new BooleanArgument());
+        dev.addArgument("dead",        new BooleanArgument());
+        dev.addArgument("connection",  new LongArgument(800L));
     }
 }
