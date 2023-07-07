@@ -1,6 +1,8 @@
 package me.shanks.hayabusa.impl.core;
 
 import me.shanks.hayabusa.api.event.bus.instance.Bus;
+import me.shanks.hayabusa.impl.core.transformer.HayabusaTransformer;
+import me.shanks.hayabusa.impl.core.util.MixinHelper;
 import me.shanks.hayabusa.impl.util.misc.FileUtil;
 import me.shanks.hayabusa.tweaker.HayabusaTweaker;
 import me.shanks.hayabusa.tweaker.TweakerCore;
@@ -34,6 +36,8 @@ public class Core implements TweakerCore
         FileUtil.createDirectory(path);
         FileUtil.getDirectory(path, "plugins");
 
+        MixinHelper helper = MixinHelper.getHelper();
+
         MixinBootstrap.init();
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT)
                 .setSide(MixinEnvironment.Side.CLIENT);
@@ -57,6 +61,7 @@ public class Core implements TweakerCore
 
         Mixins.addConfiguration(extraMixin);
 
+        helper.addConfigExclusion("mixins.hayabusa.json");
         Mixins.addConfiguration("mixins.hayabusa.json");
         String obfuscationContext = "searge";
         if (Environment.getEnvironment() == Environment.VANILLA)
@@ -71,6 +76,6 @@ public class Core implements TweakerCore
     @Override
     public String[] getTransformers()
     {
-        return new String[0];
+        return new String[] { HayabusaTransformer.class.getName() };
     }
 }
