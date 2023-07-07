@@ -3,7 +3,7 @@
     "modid": "hayabusa",
     "name": "Hayabusa",
     "description": "A 1.8.9 Skyblock/Hypixel Client.",
-    "version": "1.0.0",
+    "version": "1.0.0-build-cd98e705",
     "mcversion": "1.8.9",
     "url": "",
     "updateUrl": "",
