@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DevArguments implements ArgumentManager
 {
-    private static final Logger LOGGER = LogManager.getLogger("3arthh4ck-Core");
+    private static final Logger LOGGER = LogManager.getLogger("Hayabusa-Core");
     private static final DevArguments INSTANCE = new DevArguments();
-    private static final String PATH = "earthhack/dev.json";
+    private static final String PATH = "hayabusa/dev.json";
 
     private final Map<String, Argument<?>> arguments;
 

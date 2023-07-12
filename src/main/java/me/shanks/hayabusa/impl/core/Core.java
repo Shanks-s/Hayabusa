@@ -1,8 +1,9 @@
 package me.shanks.hayabusa.impl.core;
 
-import me.shanks.hayabusa.api.event.bus.instance.Bus;
+import me.shanks.hayabusa.api.plugin.PluginConfig;
 import me.shanks.hayabusa.impl.core.transformer.HayabusaTransformer;
 import me.shanks.hayabusa.impl.core.util.MixinHelper;
+import me.shanks.hayabusa.impl.managers.client.PluginManager;
 import me.shanks.hayabusa.impl.util.misc.FileUtil;
 import me.shanks.hayabusa.tweaker.HayabusaTweaker;
 import me.shanks.hayabusa.tweaker.TweakerCore;
@@ -26,6 +27,14 @@ public class Core implements TweakerCore
     /** Logger for the Core. */
     public static final Logger LOGGER = LogManager.getLogger("Hayabusa-Core");
 
+    /**
+     * Creates Hayabusas Files, starts Mixin, uses the
+     * {@link PluginManager} to get PluginConfigs and
+     * registers their, the given and the
+     * mixins.hayabusa.json mixinConfigs in Mixin.
+     *
+     * @param pluginClassLoader the classLoader to load the Plugins with.
+     */
     @Override
     public void init(ClassLoader pluginClassLoader)
     {
@@ -35,6 +44,8 @@ public class Core implements TweakerCore
         Path path = Paths.get("hayabusa");
         FileUtil.createDirectory(path);
         FileUtil.getDirectory(path, "plugins");
+
+        PluginManager.getInstance().createPluginConfigs(pluginClassLoader);
 
         MixinHelper helper = MixinHelper.getHelper();
 
@@ -60,6 +71,21 @@ public class Core implements TweakerCore
         }
 
         Mixins.addConfiguration(extraMixin);
+
+        for (PluginConfig config : PluginManager.getInstance()
+                                                .getConfigs()
+                                                .values())
+        {
+            if (config.getMixinConfig() != null)
+            {
+                LOGGER.info("Adding "
+                                + config.getName()
+                                + "'s MixinConfig: "
+                                + config.getMixinConfig());
+
+                Mixins.addConfiguration(config.getMixinConfig());
+            }
+        }
 
         helper.addConfigExclusion("mixins.hayabusa.json");
         Mixins.addConfiguration("mixins.hayabusa.json");

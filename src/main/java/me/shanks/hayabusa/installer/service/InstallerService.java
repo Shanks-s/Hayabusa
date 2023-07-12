@@ -24,12 +24,12 @@ public class InstallerService
             throws IOException
     {
         boolean hasForge = VersionUtil.hasForge(version);
-        boolean hasEarth = VersionUtil.hasHayabusa(version);
+        boolean hasHayabusa = VersionUtil.hasHayabusa(version);
 
         update(files, hasForge);
         InstallerUtil.installLibs(version.getJson());
 
-        if (!hasEarth)
+        if (!hasHayabusa)
         {
             InstallerUtil.installHayabusa(version.getJson(), hasForge);
             write(version);

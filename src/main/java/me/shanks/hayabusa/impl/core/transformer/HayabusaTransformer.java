@@ -75,6 +75,7 @@ public class HayabusaTransformer implements IClassTransformer
         try
         {
             Class.forName("me.shanks.hayabusa.impl.core.util.AsmUtil");
+            Class.forName("me.shanks.hayabusa.impl.util.misc.ReflectionUtil");
         }
         catch (ClassNotFoundException e)
         {
