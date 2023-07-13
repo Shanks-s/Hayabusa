@@ -66,11 +66,11 @@ def getCheckedOutGitCommitHash() {
 
 // build constants
 boolean INCREMENT = false // increments version
-boolean UNIQUE = true // adds a random 8-char string to the build number
+boolean UNIQUE = false // adds a random 8-char string to the build number
 // instead of incrementing the last number
 // this is so that we don't get absurdly large numbers
 // maybe only increment the number automatically if CI is ever added to the repo?
-boolean HASH = false
+boolean HASH = true
 boolean DATE = false // adds the date to the random string
 boolean CLEAR = true // clears other jars in the build folder to stop it from being clogged up
 
