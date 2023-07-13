@@ -1,6 +1,7 @@
 package me.shanks.hayabusa.impl.util.misc;
 
 import com.google.gson.JsonObject;
+import me.shanks.hayabusa.api.config.Jsonable;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

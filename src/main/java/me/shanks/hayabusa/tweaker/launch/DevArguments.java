@@ -2,7 +2,7 @@ package me.shanks.hayabusa.tweaker.launch;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

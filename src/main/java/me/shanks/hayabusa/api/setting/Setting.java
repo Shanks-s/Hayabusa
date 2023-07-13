@@ -5,7 +5,7 @@ import me.shanks.hayabusa.api.observable.Observable;
 import me.shanks.hayabusa.api.setting.event.SettingEvent;
 import me.shanks.hayabusa.api.setting.event.SettingResult;
 import me.shanks.hayabusa.api.util.interfaces.Nameable;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 
 import java.util.Objects;
 

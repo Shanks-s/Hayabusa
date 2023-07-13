@@ -1,4 +1,4 @@
-package me.shanks.hayabusa.impl.util.misc;
+package me.shanks.hayabusa.api.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

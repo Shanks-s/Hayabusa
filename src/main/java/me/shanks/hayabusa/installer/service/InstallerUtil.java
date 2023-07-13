@@ -3,7 +3,7 @@ package me.shanks.hayabusa.installer.service;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 import me.shanks.hayabusa.installer.version.VersionUtil;
 
 import java.util.Iterator;

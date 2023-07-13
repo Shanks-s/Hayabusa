@@ -5,7 +5,7 @@ import me.shanks.hayabusa.api.plugin.PluginConfig;
 import me.shanks.hayabusa.impl.Hayabusa;
 import me.shanks.hayabusa.impl.core.Core;
 import me.shanks.hayabusa.impl.managers.client.exception.BadPluginException;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 import me.shanks.hayabusa.impl.util.misc.ReflectionUtil;
 import me.shanks.hayabusa.vanilla.Environment;
 

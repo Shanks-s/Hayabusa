@@ -1,7 +1,7 @@
 package me.shanks.hayabusa.installer.version;
 
 import com.google.gson.*;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 
 public class VersionUtil
 {

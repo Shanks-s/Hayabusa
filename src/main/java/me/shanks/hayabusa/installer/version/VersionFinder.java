@@ -1,14 +1,12 @@
 package me.shanks.hayabusa.installer.version;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import me.shanks.hayabusa.impl.util.misc.Jsonable;
+import me.shanks.hayabusa.api.config.Jsonable;
 import me.shanks.hayabusa.installer.main.MinecraftFiles;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
